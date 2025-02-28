@@ -22,8 +22,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Sirva os arquivos estáticos do front-end (build)
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// Sirva os arquivos estáticos do front-end (build copiado para public)
+app.use(express.static(path.join(__dirname, "public")));
 
 // Rotas da API
 app.use("/api/auth", authRoutes);
@@ -33,7 +33,7 @@ app.use("/api/assunto_contextualizado", assuntoRoutes);
 
 // Rota catch-all para retornar o index.html (suporta client-side routing)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(PORT, () => {
