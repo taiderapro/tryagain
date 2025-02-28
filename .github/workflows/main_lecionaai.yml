@@ -13,44 +13,35 @@ jobs:
       contents: read  # Necessário para o actions/checkout
 
     steps:
-      # 1. Checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Configura Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
 
-      # 3. Instala e builda o FRONTEND
       - name: Install & Build Frontend
         run: |
           cd projeto_integrado/app/frontend
           npm install
-          npm run build  # Gera a pasta dist
+          npm run build
 
-      # 4. Instala e (opcional) builda o BACKEND
       - name: Install & Build Backend
         run: |
           cd projeto_integrado/app/backend
           npm install
           npm run build --if-present
-          # Se tiver testes:
-          # npm test --if-present
 
-      # 5. Copia o build do frontend para dentro do backend
       - name: Copy Frontend dist to Backend
         run: |
           cp -R projeto_integrado/app/frontend/dist projeto_integrado/app/backend/public
 
-      # 6. Empacota o backend inteiro (com a dist dentro)
       - name: Zip artifact for deployment
         run: |
           cd projeto_integrado/app/backend
           zip -r ../../../release.zip .
 
-      # 7. Upload do ZIP para ser usado no job de deploy
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -68,7 +59,6 @@ jobs:
       contents: read
 
     steps:
-      # 8. Baixar o artifact do job anterior
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
@@ -77,18 +67,18 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      # 9. Login na Azure (substitua os secrets conforme seu setup)
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_XXXX }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_XXXX }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_XXXX }}
+          client-id: "33810c64-d377-4d04-9901-354486e1af16"        # Substitua pelo seu Client ID
+          client-secret: "mtk8Q~oMEeSOXKuFDFb2bklqd1vLAzLcQkcLUauw"
+          subscription-id: "e1872b0c-df1e-4ad0-ac14-92125a81e3d9"
+          tenant-id: "5aa32f22-2ec3-48d7-9df1-277d5f48402e"          # Substitua pelo seu Tenant ID
 
-      # 10. Deploy para um único Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'lecionaai'  # Nome exato do seu App Service
+          app-name: 'lecionaai'
+          slot-name: 'Production'
           package: '.'
