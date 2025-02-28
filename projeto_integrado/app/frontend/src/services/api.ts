@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // LINK do Codespace no backend, ex.:
-const baseURL = "http://localhost:5000";
+const baseURL = "https://lecionaai-cmgkbkc8e4eranhu.canadacentral-01.azurewebsites.net";
 
 const api = axios.create({ baseURL });
 
