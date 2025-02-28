@@ -70,7 +70,7 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          auth-type: 'sp'
+          auth-type: 'SERVICE_PRINCIPAL'
           client-id: "33810c64-d377-4d04-9901-354486e1af16"
           client-secret: "mtk8Q~oMEeSOXKuFDFb2bklqd1vLAzLcQkcLUauw"
           subscription-id: "e1872b0c-df1e-4ad0-ac14-92125a81e3d9"
